@@ -8,6 +8,7 @@ services:
 
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:5000/api
+      WATCHPACK_POLLING: "true"
 
     volumes:
       - .:/app
