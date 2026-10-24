@@ -1,3 +1,4 @@
+
 export default function CompanyAdminDashboard() {
   return (
     <div className="p-8 text-white">

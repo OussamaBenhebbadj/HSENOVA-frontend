@@ -13,19 +13,40 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const roleRedirects: Record<string, string> = {
+    "Company admin": "/company-admin",
+    "Super admin": "/super-admin",
+    "Employee": "/employee",
+    "HSE Manager": "/manager",
+  };
+
   async function handleSubmit() {
     setError("");
     setLoading(true);
+
     try {
       const result = await login({ email, password });
+
+      const redirectPath = roleRedirects[result.user.role];
+
+      if (!redirectPath) {
+        throw new Error("Aucun dashboard associé à ce rôle.");
+      }
+
       localStorage.setItem("token", result.token);
-      router.push("/company-admin");
-    } catch (err: any) {
-      setError(err.message || "Email ou mot de passe incorrect.");
+
+      router.replace(redirectPath);
+
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Email ou mot de passe incorrect."
+      );
     } finally {
       setLoading(false);
     }
-  }
+}
 
   return (
     <div>
